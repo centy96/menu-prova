@@ -40,13 +40,18 @@ body{
   radial-gradient(ellipse at 20% 0%,#0d4068 0%,transparent 55%),
   radial-gradient(ellipse at 80% 100%,#06283f 0%,transparent 60%),
   linear-gradient(180deg,#06223a 0%,#04172a 100%);}
+.ocean-bg::before{content:'';position:absolute;inset:-18%;pointer-events:none;
+  background:radial-gradient(ellipse at 45% 72%,rgba(127,184,217,.18),transparent 48%),
+  radial-gradient(ellipse at 62% 18%,rgba(201,168,106,.08),transparent 38%);
+  opacity:.72;transform:translate3d(0,0,0);animation:bgBreathe 12s ease-in-out infinite alternate}
 .wave{position:fixed;left:0;width:200%;bottom:0;z-index:0;opacity:.5;
-  background-repeat:repeat-x;background-position:bottom;}
+  background-repeat:repeat-x;background-position:bottom;will-change:transform;backface-visibility:hidden;transform:translate3d(0,0,0)}
 .wave svg{display:block;width:50%;height:auto;float:left}
 .w1{animation:drift 22s linear infinite;opacity:.10;height:38vh}
 .w2{animation:drift 16s linear infinite reverse;opacity:.07;height:30vh}
 .w3{animation:drift 30s linear infinite;opacity:.05;height:46vh}
 @keyframes drift{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes bgBreathe{from{transform:translate3d(-2%,1%,0) scale(1)}to{transform:translate3d(2%,-2%,0) scale(1.06)}}
 .grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.035;mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
 
@@ -254,6 +259,16 @@ body{
 }
 
 @media(max-width:760px){
+  .ocean-bg{background:
+    radial-gradient(ellipse at 50% -10%,rgba(58,134,184,.38) 0%,transparent 58%),
+    radial-gradient(ellipse at 35% 88%,rgba(127,184,217,.16) 0%,transparent 52%),
+    linear-gradient(180deg,#072b49 0%,#04172a 72%)}
+  .ocean-bg::before{inset:-30%;opacity:.95;animation-duration:9s}
+  .wave{width:240%;left:-20%;bottom:-3vh}
+  .wave svg{width:50%;height:100%}
+  .w1{height:24vh;opacity:.16;animation-duration:14s}
+  .w2{height:31vh;opacity:.11;animation-duration:19s}
+  .w3{height:40vh;opacity:.08;animation-duration:26s}
   #screen-home.active{justify-content:flex-start;padding-top:82px}
   .hero{padding-bottom:4px}
   .hero .sub{max-width:320px;font-size:14px}
@@ -522,9 +537,9 @@ body{
 </head>
 <body>
 <div class="ocean-bg"></div>
-<div class="wave w3"><svg viewBox="0 0 1200 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,100 C150,160 350,40 600,100 C850,160 1050,40 1200,100 L1200,200 L0,200 Z" fill="%237fb8d9"/></svg><svg viewBox="0 0 1200 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,100 C150,160 350,40 600,100 C850,160 1050,40 1200,100 L1200,200 L0,200 Z" fill="%237fb8d9"/></svg></div>
-<div class="wave w2"><svg viewBox="0 0 1200 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,120 C200,60 400,180 600,120 C800,60 1000,180 1200,120 L1200,200 L0,200 Z" fill="%233a86b8"/></svg><svg viewBox="0 0 1200 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,120 C200,60 400,180 600,120 C800,60 1000,180 1200,120 L1200,200 L0,200 Z" fill="%233a86b8"/></svg></div>
-<div class="wave w1"><svg viewBox="0 0 1200 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,140 C150,90 350,190 600,140 C850,90 1050,190 1200,140 L1200,200 L0,200 Z" fill="%23ffffff"/></svg><svg viewBox="0 0 1200 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,140 C150,90 350,190 600,140 C850,90 1050,190 1200,140 L1200,200 L0,200 Z" fill="%23ffffff"/></svg></div>
+<div class="wave w3"><svg viewBox="0 0 1200 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,100 C150,160 350,40 600,100 C850,160 1050,40 1200,100 L1200,200 L0,200 Z" fill="#7fb8d9"/></svg><svg viewBox="0 0 1200 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,100 C150,160 350,40 600,100 C850,160 1050,40 1200,100 L1200,200 L0,200 Z" fill="#7fb8d9"/></svg></div>
+<div class="wave w2"><svg viewBox="0 0 1200 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,120 C200,60 400,180 600,120 C800,60 1000,180 1200,120 L1200,200 L0,200 Z" fill="#3a86b8"/></svg><svg viewBox="0 0 1200 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,120 C200,60 400,180 600,120 C800,60 1000,180 1200,120 L1200,200 L0,200 Z" fill="#3a86b8"/></svg></div>
+<div class="wave w1"><svg viewBox="0 0 1200 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,140 C150,90 350,190 600,140 C850,90 1050,190 1200,140 L1200,200 L0,200 Z" fill="#ffffff"/></svg><svg viewBox="0 0 1200 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,140 C150,90 350,190 600,140 C850,90 1050,190 1200,140 L1200,200 L0,200 Z" fill="#ffffff"/></svg></div>
 <div class="grain"></div>
 
 <div class="app">
