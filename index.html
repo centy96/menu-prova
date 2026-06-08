@@ -336,7 +336,7 @@ body.wine-wave-rose .w1 path{fill:#ffe2d2}body.wine-wave-rose .w2 path{fill:#f0a
 .fbtn .ic{font-size:14px}
 
 /* nav sezioni */
-.secnav{position:sticky;top:62px;z-index:40;display:flex;gap:8px;padding:14px 26px;overflow-x:auto;scrollbar-width:none;
+.secnav{position:sticky;top:62px;z-index:40;display:flex;gap:8px;padding:14px 26px;overflow-x:auto;scrollbar-width:none;scroll-behavior:smooth;
   background:linear-gradient(180deg,rgba(4,23,42,.92),rgba(4,23,42,.4));backdrop-filter:blur(8px)}
 .secnav::-webkit-scrollbar{display:none}
 .secnav a{flex:0 0 auto;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(247,251,253,.5);
@@ -6176,6 +6176,7 @@ let curMenu=null;
 let curFilter="all";
 let drinkBase="all";   // filtro base alcolica per la sezione drink
 let spiritBase="all";  // filtro famiglia per distillati
+let lastCenteredSection=null;
 
 /* ============ RENDER LINGUE ============ */
 function placeLangSelector(){
@@ -6384,9 +6385,25 @@ function menuScrollOffset(){
   return Math.ceil(topbarH+navH+12);
 }
 function setCurrentSectionLink(id){
-  document.querySelectorAll('.secnav a').forEach(a=>{
-    a.classList.toggle('cur',!!id&&a.getAttribute('href')==='#'+id);
+  const links=document.querySelectorAll('.secnav a');
+  let active=null;
+  links.forEach(a=>{
+    const isCur=!!id&&a.getAttribute('href')==='#'+id;
+    a.classList.toggle('cur',isCur);
+    if(isCur) active=a;
   });
+  keepSecnavItemReadable(active,id);
+}
+function keepSecnavItemReadable(active,id){
+  const nav=document.getElementById('secnav');
+  if(!nav||!active||!id||lastCenteredSection===id) return;
+  const n=nav.getBoundingClientRect();
+  const a=active.getBoundingClientRect();
+  const margin=28;
+  if(a.left>=n.left+margin && a.right<=n.right-margin) return;
+  lastCenteredSection=id;
+  const target=active.offsetLeft-(nav.clientWidth-active.offsetWidth)/2;
+  nav.scrollTo({left:Math.max(0,target),behavior:'smooth'});
 }
 function scrollToMenuSection(id){
   const section=document.getElementById(id);
@@ -6394,6 +6411,7 @@ function scrollToMenuSection(id){
   const title=section.querySelector('h3')||section;
   const y=window.scrollY+title.getBoundingClientRect().top-menuScrollOffset()-10;
   window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
+  lastCenteredSection=null;
   setCurrentSectionLink(id);
 }
 
@@ -6421,6 +6439,7 @@ function renderMenu(key,keepScroll){
   /* nav sezioni */
   const nav=document.getElementById('secnav');
   nav.innerHTML="";
+  lastCenteredSection=null;
   const visibleSecs=m.sections.filter(s=>sectionHasVisible(s));
   visibleSecs.forEach(s=>{
     const a=document.createElement('a');
