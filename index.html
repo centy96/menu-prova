@@ -263,11 +263,11 @@ body.home-landing .topbar{opacity:0;pointer-events:none;transform:translateY(-10
     radial-gradient(ellipse at 35% 88%,rgba(127,184,217,.16) 0%,transparent 52%),
     linear-gradient(180deg,#072b49 0%,#04172a 72%)}
   .ocean-bg::before{inset:-30%;opacity:.95;animation-duration:9s}
-  .wave{width:240%;left:-20%;bottom:-3vh}
+  .wave{width:250%;left:-24%;bottom:-5vh}
   .wave svg{width:50%;height:100%}
-  .w1{height:24vh;opacity:.16;animation-duration:14s}
-  .w2{height:31vh;opacity:.11;animation-duration:19s}
-  .w3{height:40vh;opacity:.08;animation-duration:26s}
+  .w1{height:34vh;opacity:.18;animation-duration:14s}
+  .w2{height:44vh;opacity:.13;animation-duration:19s}
+  .w3{height:58vh;opacity:.10;animation-duration:26s}
   #screen-home.active{justify-content:flex-start;padding-top:34px}
   .hero{padding-bottom:4px}
   .hero .sub{max-width:320px;font-size:14px}
@@ -391,6 +391,12 @@ body.wine-wave-rose .w1 path{fill:#ffe2d2}body.wine-wave-rose .w2 path{fill:#f0a
 .dish.best-seller{border-color:rgba(201,168,106,.5);background:linear-gradient(135deg,rgba(201,168,106,.14),rgba(127,184,217,.04));box-shadow:0 16px 34px rgba(0,0,0,.18),inset 0 0 0 1px rgba(201,168,106,.14);padding-top:34px}
 .dish.best-seller::after{content:'Best seller';position:absolute;top:9px;left:16px;right:auto;z-index:3;padding:4px 8px;border-radius:999px;background:rgba(201,168,106,.92);color:var(--blu-notte);font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
 .dish.best-seller .price{color:#f1d99b}
+.dish.unavailable,.minimal-row.unavailable,.breakfast-row.unavailable,.drink-row.unavailable,.wine-row.unavailable{opacity:.48;cursor:not-allowed;filter:saturate(.45)}
+.dish.unavailable{border-color:rgba(247,251,253,.14);background:linear-gradient(135deg,rgba(247,251,253,.055),rgba(127,184,217,.025))}
+.dish.unavailable .thumb{filter:grayscale(1);opacity:.42}
+.dish.unavailable .price,.minimal-row.unavailable .mprice,.breakfast-row.unavailable .bprice,.drink-row.unavailable .dprice,.wine-row.unavailable .wp{color:rgba(247,251,253,.42)}
+.unavailable-badge{display:inline-flex;align-items:center;justify-content:center;width:max-content;margin-top:8px;padding:4px 9px;border:1px solid rgba(247,251,253,.24);border-radius:999px;color:rgba(247,251,253,.72);font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;background:rgba(4,23,42,.38)}
+.minimal-row .unavailable-badge,.breakfast-row .unavailable-badge,.drink-row .unavailable-badge,.wine-row .unavailable-badge{margin-top:0;margin-left:8px;vertical-align:middle}
 .drink-list{display:grid;gap:12px;margin-top:6px;max-width:760px}
 .drink-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:start;padding:2px 0;cursor:pointer}
 .drink-row .dname{font-family:var(--sans);font-size:19px;line-height:1.1;text-transform:uppercase;color:var(--bianco);font-weight:400;letter-spacing:.01em}
@@ -450,6 +456,7 @@ body.wine-wave-rose .w1 path{fill:#ffe2d2}body.wine-wave-rose .w2 path{fill:#f0a
 .gt-row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;font-weight:300;font-size:15px;
   border-bottom:1px solid rgba(127,184,217,.1)}
 .gt-row span:last-child{font-family:var(--serif);color:var(--azzurro-chiaro)}
+.gt-note{margin:-2px 0 8px;font-size:11px;font-weight:200;color:rgba(247,251,253,.58);letter-spacing:.03em}
 .gt-row.gt-sum{border-bottom:none;border-top:1.5px solid rgba(201,168,106,.3);margin-top:4px;padding-top:12px;font-weight:500}
 .gt-row.gt-sum span{font-family:var(--serif);font-size:20px;color:var(--oro)}
 .empty{text-align:center;padding:60px 20px;color:rgba(127,184,217,.55);font-weight:200;font-size:15px;
@@ -6090,6 +6097,7 @@ const FILTER_DEFS=[
   {id:"best",icon:"★",label:{it:"Best seller",en:"Best seller",fr:"Best seller",de:"Best seller"}}
 ];
 const TAG_LABEL={fish:{it:"Pesce",en:"Fish",fr:"Poisson",de:"Fisch"},meat:{it:"Carne",en:"Meat",fr:"Viande",de:"Fleisch"},veg:{it:"Veg",en:"Veg",fr:"Veg",de:"Veg"},gf:{it:"Senza glutine",en:"Gluten-free",fr:"Sans gluten",de:"Glutenfrei"},spicy:{it:"Piccante",en:"Spicy",fr:"Piquant",de:"Scharf"},best:{it:"Best seller",en:"Best seller",fr:"Best seller",de:"Best seller"}};
+const UNAVAILABLE_LABEL={it:"Non disponibile",en:"Unavailable",fr:"Non disponible",de:"Nicht verfügbar"};
 
 /* ============ ORIGINE DATI ============
    I dati arrivano dal server (api.php?action=get) all'avvio, così il menu
@@ -6099,6 +6107,13 @@ const TAG_LABEL={fish:{it:"Pesce",en:"Fish",fr:"Poisson",de:"Fisch"},meat:{it:"C
 let MENUS = DEFAULT_MENUS;
 function tr(obj,fallback=""){ return obj ? (obj[LANG] ?? obj.en ?? obj.it ?? obj.fr ?? fallback) : fallback; }
 function uiText(key){ return I18N[LANG]?.[key] ?? I18N.en?.[key] ?? I18N.it?.[key] ?? ""; }
+function isUnavailable(d){ return (d.type||[]).includes('unavailable'); }
+function unavailableClass(d){ return isUnavailable(d) ? ' unavailable' : ''; }
+function unavailableBadge(d){ return isUnavailable(d) ? `<span class="unavailable-badge">${tr(UNAVAILABLE_LABEL)}</span>` : ''; }
+function clickAttr(key,d){ return isUnavailable(d) ? 'aria-disabled="true"' : `onclick="openProduct('${key}','${d.id}')"`; }
+function visibleTagBadges(d){
+  return (d.type||[]).filter(t=>t!=='unavailable'&&TAG_LABEL[t]).map(t=>`<span class="tag ${t}">${tr(TAG_LABEL[t])}</span>`).join('');
+}
 
 const ALLERGEN_LEGEND_TEXT={
   it:`*Prodotto fresco. In mancanza, prodotto congelato da noi per la conservazione nel rispetto della normativa sanitaria.
@@ -6141,14 +6156,22 @@ function closeAllergenLegend(){
 }
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeAllergenLegend(); });
 function priceLabel(d){ return d && d.price ? "\u20ac "+d.price : ""; }
-function sectionCountWord(s,count){
+function sectionCountWord(s,count,menuKey){
   const one={
-    it:{dishes:"portata",labels:"etichetta",articles:"Articolo",flavors:"gusto"},
-    en:{dishes:"dish",labels:"label",articles:"Item",flavors:"flavor"},
-    fr:{dishes:"plat",labels:"étiquette",articles:"Article",flavors:"parfum"},
-    de:{dishes:"Gericht",labels:"Etikett",articles:"Artikel",flavors:"Sorte"}
+    it:{dishes:"portata",labels:"etichetta",articles:"Articolo",flavors:"gusto",entries:"voce"},
+    en:{dishes:"dish",labels:"label",articles:"Item",flavors:"flavor",entries:"item"},
+    fr:{dishes:"plat",labels:"étiquette",articles:"Article",flavors:"parfum",entries:"élément"},
+    de:{dishes:"Gericht",labels:"Etikett",articles:"Artikel",flavors:"Sorte",entries:"Eintrag"}
+  };
+  const many={
+    it:{entries:"voci"},
+    en:{entries:"items"},
+    fr:{entries:"éléments"},
+    de:{entries:"Einträge"}
   };
   const langOne=one[LANG]||one.it;
+  const langMany=many[LANG]||many.it;
+  if(menuKey==='colazione') return count===1 ? langOne.entries : langMany.entries;
   if(s.wine||s.kind==='spirits') return count===1 ? langOne.labels : (I18N[LANG].labelsN||I18N.it.labelsN);
   if(s.kind==='soft') return count===1 ? langOne.articles : (I18N[LANG].articlesN||I18N.it.articlesN);
   if(s.id==='gelati-pub') return count===1 ? langOne.flavors : (I18N[LANG].flavorsN||I18N.it.flavorsN);
@@ -6370,7 +6393,7 @@ function goHome(){
   buildCarousel();
 }
 
-function toggleMinimalOptions(id){
+  function toggleMinimalOptions(id){
   const row=document.querySelector(`.minimal-row[data-options="${id}"]`);
   const box=document.getElementById('opts-'+id);
   if(!box) return;
@@ -6469,7 +6492,7 @@ function renderMenu(key,keepScroll){
     if(dishes.length===0 && !isDrink && !isGin) return;
     const sec=document.createElement('div');
     sec.className="section";sec.id="sec-"+s.id;
-    let inner=`<h3>${tr(s.name)}</h3><span class="scount">${isGin?'':dishes.length+' '+sectionCountWord(s,dishes.length)}</span>`;
+    let inner=`<h3>${tr(s.name)}</h3><span class="scount">${isGin?'':dishes.length+' '+sectionCountWord(s,dishes.length,key)}</span>`;
     if(s.wine){
       inner+=renderWineSection(key,s);
     }else if(isGin){
@@ -6482,14 +6505,14 @@ function renderMenu(key,keepScroll){
       }
       dishes.forEach(d=>{
         const best=(d.type||[]).includes('best')?' best-seller':'';
-        inner+=`<div class="minimal-row${best}"><span>${tr(d.name)}</span><span class="mprice">${priceLabel(d)}</span></div>`;
+        inner+=`<div class="minimal-row${best}${unavailableClass(d)}"${isUnavailable(d)?' aria-disabled="true"':''}><span>${tr(d.name)}${unavailableBadge(d)}</span><span class="mprice">${priceLabel(d)}</span></div>`;
       });
       inner+='</div>';
     }else if(isBreakfastList){
       inner+='<div class="breakfast-list">';
       dishes.forEach(d=>{
         const desc=d.desc&&tr(d.desc)?`<div class="bdesc">${tr(d.desc)}</div>`:'';
-        inner+=`<div class="breakfast-row" onclick="openProduct('${key}','${d.id}')"><div><div class="bname">${tr(d.name)}</div>${desc}</div><span class="bprice">${priceLabel(d)}</span></div>`;
+        inner+=`<div class="breakfast-row${unavailableClass(d)}" ${clickAttr(key,d)}><div><div class="bname">${tr(d.name)}</div>${desc}${unavailableBadge(d)}</div><span class="bprice">${priceLabel(d)}</span></div>`;
       });
       inner+='</div>';
     }else if(isMinimal){
@@ -6497,9 +6520,9 @@ function renderMenu(key,keepScroll){
       dishes.forEach(d=>{
         const best=(d.type||[]).includes('best')?' best-seller':'';
         const hasOptions=!!d.options;
-        const optsAttr=hasOptions?` data-options="${d.id}" onclick="toggleMinimalOptions('${d.id}')"`:'';
+        const optsAttr=hasOptions&&!isUnavailable(d)?` data-options="${d.id}" onclick="toggleMinimalOptions('${d.id}')"`:(isUnavailable(d)?' aria-disabled="true"':'');
         const caret=hasOptions?'<span class="option-caret">&#8964;</span>':'';
-        inner+=`<div class="minimal-row${best}${hasOptions?' has-options':''}"${optsAttr}><span>${tr(d.name)}</span><span class="mprice">${priceLabel(d)}${caret}</span></div>`;
+        inner+=`<div class="minimal-row${best}${unavailableClass(d)}${hasOptions&&!isUnavailable(d)?' has-options':''}"${optsAttr}><span>${tr(d.name)}${unavailableBadge(d)}</span><span class="mprice">${priceLabel(d)}${!isUnavailable(d)?caret:''}</span></div>`;
         if(hasOptions){
           const list=(d.options[LANG]||d.options.it||[]).join(', ');
           inner+=`<div class="minimal-options" id="opts-${d.id}">${list}</div>`;
@@ -6511,7 +6534,7 @@ function renderMenu(key,keepScroll){
       dishes.forEach(d=>{
         const signature=(d.type||[]).includes('signature')?' signature':'';
         const best=(d.type||[]).includes('best')?' best-seller':'';
-        inner+=`<div class="minimal-row${signature}${best}" onclick="openProduct('${key}','${d.id}')"><span>${tr(d.name)}</span><span class="mprice">${priceLabel(d)}</span></div>`;
+        inner+=`<div class="minimal-row${signature}${best}${unavailableClass(d)}" ${clickAttr(key,d)}><span>${tr(d.name)}${unavailableBadge(d)}</span><span class="mprice">${priceLabel(d)}</span></div>`;
       });
       inner+='</div>';
     }else if(isDrink){
@@ -6523,12 +6546,12 @@ function renderMenu(key,keepScroll){
       dishes.forEach(d=>{
         const baseLabel = d.base ? `<span class="tag base-${d.base}">${BASE_LABEL[d.base]?tr(BASE_LABEL[d.base]):d.base}</span>` : '';
         const best=(d.type||[]).includes('best')?' best-seller':'';
-        inner+=`<div class="dish${best}" onclick="openProduct('${key}','${d.id}')">
+        inner+=`<div class="dish${best}${unavailableClass(d)}" ${clickAttr(key,d)}>
           <div class="thumb" style="background-image:url('${imgUrl(d.img,300,300)}')"></div>
           <div class="info">
             <div class="top"><h4>${tr(d.name)}</h4><span class="price">${priceLabel(d)}</span></div>
             <p class="desc">${d.desc?tr(d.desc):''}</p>
-            <div class="tags">${baseLabel}</div>
+            <div class="tags">${baseLabel}${unavailableBadge(d)}</div>
           </div></div>`;
       });
       inner+='</div>';
@@ -6536,11 +6559,11 @@ function renderMenu(key,keepScroll){
       inner+='<div class="dishes">';
       dishes.forEach(d=>{
         const best=(d.type||[]).includes('best')?' best-seller':'';
-        inner+=`<div class="dish${best}" onclick="openProduct('${key}','${d.id}')">
+        inner+=`<div class="dish${best}${unavailableClass(d)}" ${clickAttr(key,d)}>
           <div class="thumb" style="background-image:url('${imgUrl(d.img,300,300)}')"></div>
           <div class="info">
             <div class="top"><h4>${tr(d.name)}</h4><span class="price">${priceLabel(d)}</span></div>
-            <p class="desc">${d.desc?tr(d.desc):''}</p>
+            <p class="desc">${d.desc?tr(d.desc):''}</p>${unavailableBadge(d)}
           </div></div>`;
       });
       inner+='</div>';
@@ -6548,12 +6571,12 @@ function renderMenu(key,keepScroll){
       inner+='<div class="dishes">';
       dishes.forEach(d=>{
         const best=(d.type||[]).includes('best')?' best-seller':'';
-        inner+=`<div class="dish${best}" onclick="openProduct('${key}','${d.id}')">
+        inner+=`<div class="dish${best}${unavailableClass(d)}" ${clickAttr(key,d)}>
           <div class="thumb" style="background-image:url('${imgUrl(d.img,300,300)}')"></div>
           <div class="info">
             <div class="top"><h4>${tr(d.name)}</h4><span class="price">${priceLabel(d)}</span></div>
             <p class="desc">${tr(d.desc)}</p>
-            <div class="tags">${d.type.map(t=>`<span class="tag ${t}">${tr(TAG_LABEL[t])}</span>`).join('')}</div>
+            <div class="tags">${visibleTagBadges(d)}${unavailableBadge(d)}</div>
           </div></div>`;
       });
       inner+='</div>';
@@ -6644,10 +6667,10 @@ function sectionHasVisible(s){
 /* ============ BUILD YOUR GIN ============ */
 let selGin=null, selTonic=null;  // id selezionati
 const GIN_T={
-  it:{title:"Scegli il tuo Gin",tonicTitle:"Abbina la Tonica",botaniche:"Botaniche",total:"Il tuo Gin Tonic",pick:"Seleziona un gin e una tonica",swipe:"← scorri →"},
-  en:{title:"Choose your Gin",tonicTitle:"Pair your Tonic",botaniche:"Botanicals",total:"Your Gin & Tonic",pick:"Select a gin and a tonic",swipe:"← swipe →"},
-  fr:{title:"Choisissez votre Gin",tonicTitle:"Associez la Tonique",botaniche:"Botaniques",total:"Votre Gin Tonic",pick:"Sélectionnez un gin et une tonique",swipe:"← glissez →"},
-  de:{title:"Wähle deinen Gin",tonicTitle:"Kombiniere die Tonic",botaniche:"Botanicals",total:"Dein Gin Tonic",pick:"Wähle einen Gin und eine Tonic",swipe:"← wischen →"}
+  it:{title:"Scegli il tuo Gin",tonicTitle:"Abbina la Tonica",botaniche:"Botaniche",total:"Il tuo Gin Tonic",pick:"Seleziona un gin e una tonica",swipe:"← scorri →",included:"Inclusa",includedNote:"Tonica inclusa nel cocktail",totalLabel:"Totale"},
+  en:{title:"Choose your Gin",tonicTitle:"Pair your Tonic",botaniche:"Botanicals",total:"Your Gin & Tonic",pick:"Select a gin and a tonic",swipe:"← swipe →",included:"Included",includedNote:"Tonic included in the cocktail",totalLabel:"Total"},
+  fr:{title:"Choisissez votre Gin",tonicTitle:"Associez la Tonique",botaniche:"Botaniques",total:"Votre Gin Tonic",pick:"Sélectionnez un gin et une tonique",swipe:"← glissez →",included:"Incluse",includedNote:"Tonique incluse dans le cocktail",totalLabel:"Total"},
+  de:{title:"Wähle deinen Gin",tonicTitle:"Kombiniere die Tonic",botaniche:"Botanicals",total:"Dein Gin Tonic",pick:"Wähle einen Gin und eine Tonic",swipe:"← wischen →",included:"Inbegriffen",includedNote:"Tonic im Cocktail inbegriffen",totalLabel:"Gesamt"}
 };
 function renderGinSection(key,s){
   const t=GIN_T[LANG];
@@ -6674,7 +6697,7 @@ function renderGinSection(key,s){
     h+=`<div class="bottle tonic-opt" data-id="${d.id}">
       <div class="bottle-img" style="background-image:url('${imgUrl(d.img,300,500)}')"></div>
       <div class="bottle-name">${tr(d.name)}</div>
-      <div class="bottle-price">€ ${d.price}</div>
+      <div class="bottle-price">${t.included}</div>
       <div class="bottle-sub">${d.desc?tr(d.desc):''}</div>
       <div class="bottle-check">✓</div>
     </div>`;
@@ -6703,11 +6726,11 @@ function syncGinUI(){
   const g=selGin?find(selGin):null, tn=selTonic?find(selTonic):null;
   if(g||tn){
     const parse=p=>parseFloat((p||'0').replace(',','.'))||0;
-    const tot=parse(g&&g.price)+parse(tn&&tn.price);
+    const tot=parse(g&&g.price);
     let rows='';
     if(g) rows+=`<div class="gt-row"><span>${tr(g.name)}</span><span>€ ${g.price}</span></div>`;
-    if(tn) rows+=`<div class="gt-row"><span>${tr(tn.name)}</span><span>€ ${tn.price}</span></div>`;
-    if(g&&tn) rows+=`<div class="gt-row gt-sum"><span>Totale</span><span>€ ${tot.toFixed(2).replace('.',',')}</span></div>`;
+    if(tn) rows+=`<div class="gt-row"><span>${tr(tn.name)}</span><span>${t.included}</span></div><div class="gt-note">${t.includedNote}</div>`;
+    if(g&&tn) rows+=`<div class="gt-row gt-sum"><span>${t.totalLabel}</span><span>€ ${tot.toFixed(2).replace('.',',')}</span></div>`;
     body.innerHTML=rows;
     document.getElementById('ginTotal').classList.add('active');
   }else{
@@ -6792,8 +6815,8 @@ function renderWineSection(key,s){
     any=true;
     html+=`<div class="wine-color-group ${c}"><h4>${t[labelKey]} <span class="wc-count">${ws.length}</span></h4><div class="wine-list">`;
     ws.forEach(d=>{
-      html+=`<div class="wine-row" onclick="openProduct('${key}','${d.id}')">
-        <div><span class="wn">${tr(d.name)}</span> &nbsp;<span class="wreg">${tr(d.region)}</span></div>
+      html+=`<div class="wine-row${unavailableClass(d)}" ${clickAttr(key,d)}>
+        <div><span class="wn">${tr(d.name)}</span> &nbsp;<span class="wreg">${tr(d.region)}</span>${unavailableBadge(d)}</div>
         <span class="wdot"></span><span class="wp">${priceLabel(d)}</span></div>`;
     });
     html+='</div></div>';
@@ -6886,6 +6909,7 @@ function findDish(key,id){
 function openProduct(key,id){
   const found=findDish(key,id);if(!found) return;
   const d=found.dish, s=found.section;
+  if(isUnavailable(d)) return;
   const isWine=!!s.wine, isDrink=s.kind==='drink', isDrinkList=s.kind==='drinkList', isSoft=s.kind==='soft';
   const simple=isWine||isSoft; // niente cottura/tempo/allergeni
 
