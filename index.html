@@ -58,6 +58,7 @@ body{
 /* ====== HEADER ====== */
 .topbar{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
   padding:18px 26px;transition:.5s ease;}
+body.home-landing .topbar{opacity:0;pointer-events:none;transform:translateY(-100%)}
 .topbar.scrolled{background:rgba(4,23,42,.78);backdrop-filter:blur(14px);box-shadow:0 1px 0 rgba(127,184,217,.12)}
 .brand{display:flex;align-items:center;gap:14px;cursor:pointer;transition:.4s}
 .brand:hover{opacity:.82}
@@ -76,6 +77,11 @@ body{
 .flag:hover{opacity:.85;transform:translateY(-2px)}
 .flag.active{opacity:1;border-color:var(--oro);transform:translateY(-2px) scale(1.05);box-shadow:0 4px 14px rgba(201,168,106,.4)}
 .flag svg{width:100%;height:100%;display:block}
+.landing-lang-slot{min-height:29px;margin-bottom:14px;display:flex;justify-content:center;opacity:0;animation:rise .9s .03s forwards}
+.landing-lang-slot .langs{justify-content:center}
+.landing-powered{position:fixed;right:18px;bottom:16px;z-index:12;display:flex;align-items:center;gap:8px;color:rgba(247,251,253,.62);font-size:8px;letter-spacing:.16em;text-transform:uppercase;pointer-events:none;opacity:.72}
+.landing-powered img{height:34px;width:auto;max-width:150px;object-fit:contain;filter:drop-shadow(0 5px 14px rgba(0,0,0,.3))}
+#screen-home:not(.active) .landing-powered{display:none}
 
 /* ====== SELEZIONE MENU (carosello) ====== */
 .screen{position:relative;z-index:5;min-height:100vh;min-height:100dvh;display:none}
@@ -171,13 +177,13 @@ body{
 
 /* home centrata verticalmente */
 #screen-home.active{display:flex;flex-direction:column;align-items:center;justify-content:center;
-  min-height:100vh;min-height:100dvh;padding-top:70px}
+  min-height:100vh;min-height:100dvh;padding-top:34px}
 
 .hero{padding:0 20px 18px;text-align:center;display:flex;flex-direction:column;align-items:center}
 .hero .eyebrow{font-size:11px;letter-spacing:.5em;text-transform:uppercase;color:var(--azzurro-chiaro);font-weight:300;
   opacity:0;animation:rise .9s .1s forwards}
 .hero .hero-logo{margin:14px 0 4px;opacity:0;animation:rise .9s .22s forwards}
-.hero .hero-logo img{width:clamp(280px,62vw,460px);height:auto;display:block;
+.hero .hero-logo img{width:clamp(220px,48vw,360px);height:auto;display:block;
   filter:drop-shadow(0 10px 30px rgba(0,0,0,.5))}
 .hero h2{font-family:var(--serif);font-weight:400;font-size:clamp(40px,9vw,82px);line-height:.98;margin:14px 0 8px;
   opacity:0;animation:rise .9s .25s forwards}
@@ -269,7 +275,7 @@ body{
   .w1{height:24vh;opacity:.16;animation-duration:14s}
   .w2{height:31vh;opacity:.11;animation-duration:19s}
   .w3{height:40vh;opacity:.08;animation-duration:26s}
-  #screen-home.active{justify-content:flex-start;padding-top:82px}
+  #screen-home.active{justify-content:flex-start;padding-top:34px}
   .hero{padding-bottom:4px}
   .hero .sub{max-width:320px;font-size:14px}
   .carousel.floating-menu-stage{grid-template-columns:1fr;gap:8px;width:min(100%,420px);padding:20px 22px 18px}
@@ -294,6 +300,15 @@ body{
 
 /* ====== PAGINA MENU ====== */
 .menupage{padding:96px 0 60px}
+#screen-menu{transition:background .75s ease}
+.wave{transition:opacity .55s ease}
+.wave svg path{transition:fill .65s ease}
+body.wine-wave-bianco .w1{opacity:.20}body.wine-wave-bianco .w2{opacity:.14}body.wine-wave-bianco .w3{opacity:.10}
+body.wine-wave-bianco .w1 path{fill:#fff7dc}body.wine-wave-bianco .w2 path{fill:#d9bf63}body.wine-wave-bianco .w3 path{fill:#8f7a35}
+body.wine-wave-rosso .w1{opacity:.20}body.wine-wave-rosso .w2{opacity:.15}body.wine-wave-rosso .w3{opacity:.11}
+body.wine-wave-rosso .w1 path{fill:#f1d2d2}body.wine-wave-rosso .w2 path{fill:#a84b4d}body.wine-wave-rosso .w3 path{fill:#5e1d27}
+body.wine-wave-rose .w1{opacity:.20}body.wine-wave-rose .w2{opacity:.15}body.wine-wave-rose .w3{opacity:.11}
+body.wine-wave-rose .w1 path{fill:#f5d7df}body.wine-wave-rose .w2 path{fill:#d78297}body.wine-wave-rose .w3 path{fill:#7b354b}
 .mp-head{padding:26px 26px 12px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .back{display:inline-flex;align-items:center;gap:9px;cursor:pointer;font-size:11px;letter-spacing:.24em;
   text-transform:uppercase;color:var(--azzurro-chiaro);font-weight:300;transition:.35s;background:none;border:none;font-family:var(--sans)}
@@ -361,6 +376,12 @@ body{
 .minimal-row{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:13px 2px;border-bottom:1px solid rgba(127,184,217,.12);font-family:var(--sans);font-size:14px;letter-spacing:.02em;color:rgba(247,251,253,.86)}
 .minimal-row:last-child{border-bottom:0}
 .minimal-row .mprice{font-family:var(--serif);font-size:17px;color:var(--oro);white-space:nowrap}
+.minimal-row.has-options{cursor:pointer}
+.minimal-row.has-options .mprice{display:inline-flex;align-items:center;gap:8px}
+.option-caret{font-family:var(--sans);font-size:14px;line-height:1;color:rgba(201,168,106,.86);transition:transform .25s ease}
+.minimal-row.has-options.open .option-caret{transform:rotate(180deg)}
+.minimal-options{display:none;margin:-1px 0 10px;padding:0 2px 13px 18px;border-bottom:1px solid rgba(127,184,217,.12);font-family:var(--serif);font-size:13px;line-height:1.45;color:rgba(247,251,253,.72)}
+.minimal-options.open{display:block}
 .minimal-row.signature span:first-child{color:#ff4c4c}
 .minimal-row.best-seller{position:relative;padding:14px 12px;border-color:rgba(201,168,106,.34);background:linear-gradient(90deg,rgba(201,168,106,.14),rgba(201,168,106,.035) 58%,transparent);box-shadow:inset 3px 0 0 var(--oro)}
 .minimal-row.best-seller::before{content:'\2605';color:var(--oro);font-size:12px;margin-right:2px;flex:0 0 auto}
@@ -582,7 +603,9 @@ body{
   .mp-title h2{font-size:38px}
   .filters,.secnav{padding-left:16px;padding-right:16px}
   .product .pbody{padding:0 16px 60px}
-  .hero .hero-logo img{width:clamp(220px,72vw,300px)}
+  .hero .hero-logo img{width:clamp(180px,62vw,250px)}
+  .landing-powered{right:12px;bottom:10px;font-size:7px;gap:6px;opacity:.66}
+  .landing-powered img{height:28px;max-width:118px}
   .foot .powered-by{gap:9px;font-size:9px;letter-spacing:.16em}
   .foot .powered-logo{height:56px;max-width:82vw}
   .mcard{width:84vw;height:430px}
@@ -651,6 +674,7 @@ body{
   <!-- SCHERMATA SELEZIONE -->
   <section class="screen active" id="screen-home">
     <div class="hero">
+      <div class="landing-lang-slot" id="landingLangSlot"></div>
       <div class="eyebrow" data-t="welcome">Benvenuti da</div>
       <!-- LOGO HERO (placeholder 260px) — sostituisci src con il tuo logo -->
       <div class="hero-logo"><img id="heroLogoImg" alt="Sciabaka" src=""></div>
@@ -658,6 +682,7 @@ body{
     </div>
     <div class="carousel" id="carousel"></div>
     <div class="scrollhint" data-t="scrollHint">↓ Scegli un menù ↓</div>
+  <div class="landing-powered" aria-label="Powered by IRIDE"><span>Powered by:</span><img id="landingPoweredLogoImg" alt="IRIDE" src=""></div>
   </section>
 
   <!-- SCHERMATA MENU -->
@@ -724,10 +749,10 @@ body{
 <script>
 /* ============ TRADUZIONI UI ============ */
 const I18N={
-  it:{tagline:"Cucina di mare · Porto delle Grazie",welcome:"Benvenuti da",benvenutiDa:"Benvenuti da:",heroTitle:"Il mare,",heroEm:"in tavola.",heroSub:"Scegli il tuo momento. Ogni menù racconta una marea diversa.",scrollHint:"↓ Scegli un menù ↓",back:"Tutti i menù",cottura:"Cottura",tempo:"Preparazione",origine:"Provenienza",allergeni:"Allergeni & Note",ingredienti:"Ingredienti",footer:"Molo del Porto delle Grazie · Aperto tutti i giorni<br>Prodotti freschi di giornata · Pescato locale",explore:"Esplora",dishesN:"portate",wineMapLabel:"Filtra per regione",wineFizzLabel:"Tipologia",wineAll:"Tutte le regioni",fizzSecco:"Fermo",fizzFrizzante:"Frizzante",fizzBollicine:"Bollicine",fizzChampagne:"Champagne",fizzAll:"Tutti",wColBianco:"Vini Bianchi",wColRosso:"Vini Rossi",wColRose:"Vini Rosati",wineEmpty:"Nessun vino per questa selezione",wineRegionPick:"Tutta l'Italia",allergenLegendBtn:"Legenda allergeni",allergenLegendTitle:"Legenda allergeni"},
-  en:{tagline:"Seafood cuisine · Harbour",welcome:"Welcome to",benvenutiDa:"Welcome to:",heroTitle:"The sea,",heroEm:"on your table.",heroSub:"Choose your moment. Each menu tells a different tide.",scrollHint:"↓ Choose a menu ↓",back:"All menus",cottura:"Cooking",tempo:"Preparation",origine:"Origin",allergeni:"Allergens & Notes",ingredienti:"Ingredients",footer:"Harbour Pier · Open every day<br>Fresh daily produce · Locally caught fish",explore:"Explore",dishesN:"dishes",wineMapLabel:"Filter by region",wineFizzLabel:"Type",wineAll:"All regions",fizzSecco:"Still",fizzFrizzante:"Sparkling",fizzBollicine:"Sparkling wines",fizzChampagne:"Champagne",fizzAll:"All",wColBianco:"White Wines",wColRosso:"Red Wines",wColRose:"Rosé Wines",wineEmpty:"No wines for this selection",wineRegionPick:"All of Italy",allergenLegendBtn:"Allergen legend",allergenLegendTitle:"Allergen legend"},
-  fr:{tagline:"Cuisine de la mer · Port",welcome:"Bienvenue chez",benvenutiDa:"Bienvenue chez :",heroTitle:"La mer,",heroEm:"à table.",heroSub:"Choisissez votre moment. Chaque menu raconte une marée différente.",scrollHint:"↓ Choisissez un menu ↓",back:"Tous les menus",cottura:"Cuisson",tempo:"Préparation",origine:"Provenance",allergeni:"Allergènes & Notes",ingredienti:"Ingrédients",footer:"Quai du Port · Ouvert tous les jours<br>Produits frais du jour · Pêche locale",explore:"Explorer",dishesN:"plats",wineMapLabel:"Filtrer par région",wineFizzLabel:"Type",wineAll:"Toutes les régions",fizzSecco:"Tranquille",fizzFrizzante:"Pétillant",fizzBollicine:"Bulles",fizzChampagne:"Champagne",fizzAll:"Tous",wColBianco:"Vins Blancs",wColRosso:"Vins Rouges",wColRose:"Vins Rosés",wineEmpty:"Aucun vin pour cette sélection",wineRegionPick:"Toute l'Italie",allergenLegendBtn:"Légende allergènes",allergenLegendTitle:"Légende allergènes"},
-  de:{tagline:"Meeresküche · Hafen",welcome:"Willkommen bei",benvenutiDa:"Willkommen bei:",heroTitle:"Das Meer,",heroEm:"auf dem Tisch.",heroSub:"Wähle deinen Moment. Jede Speisekarte erzählt eine andere Gezeitenstimmung.",scrollHint:"↓ Menü wählen ↓",back:"Alle Menüs",cottura:"Zubereitung",tempo:"Vorbereitung",origine:"Herkunft",allergeni:"Allergene & Hinweise",ingredienti:"Zutaten",footer:"Hafenkai · Täglich geöffnet<br>Frische Tagesprodukte · Lokaler Fang",explore:"Entdecken",dishesN:"Gerichte",wineMapLabel:"Nach Region filtern",wineFizzLabel:"Typ",wineAll:"Alle Regionen",fizzSecco:"Still",fizzFrizzante:"Prickelnd",fizzBollicine:"Schaumweine",fizzChampagne:"Champagner",fizzAll:"Alle",wColBianco:"Weißweine",wColRosso:"Rotweine",wColRose:"Roséweine",wineEmpty:"Kein Wein für diese Auswahl",wineRegionPick:"Ganz Italien",allergenLegendBtn:"Allergenlegende",allergenLegendTitle:"Allergenlegende"}
+  it:{tagline:"Cucina di mare · Porto delle Grazie",welcome:"Benvenuti da",benvenutiDa:"Benvenuti da:",heroTitle:"Il mare,",heroEm:"in tavola.",heroSub:"Scegli il tuo momento. Ogni menù racconta una marea diversa.",scrollHint:"↓ Scegli un menù ↓",back:"Tutti i menù",cottura:"Cottura",tempo:"Preparazione",origine:"Provenienza",allergeni:"Allergeni & Note",ingredienti:"Ingredienti",footer:"Molo del Porto delle Grazie · Aperto tutti i giorni<br>Prodotti freschi di giornata · Pescato locale",explore:"Esplora",dishesN:"portate",labelsN:"etichette",articlesN:"Articoli",flavorsN:"gusti",wineMapLabel:"Filtra per regione",wineFizzLabel:"Tipologia",wineAll:"Tutte le regioni",fizzSecco:"Fermo",fizzFrizzante:"Frizzante",fizzBollicine:"Bollicine",fizzChampagne:"Champagne",fizzAll:"Tutti",wColBianco:"Vini Bianchi",wColRosso:"Vini Rossi",wColRose:"Vini Rosati",wineEmpty:"Nessun vino per questa selezione",wineRegionPick:"Tutta l'Italia",allergenLegendBtn:"Legenda allergeni",allergenLegendTitle:"Legenda allergeni"},
+  en:{tagline:"Seafood cuisine · Harbour",welcome:"Welcome to",benvenutiDa:"Welcome to:",heroTitle:"The sea,",heroEm:"on your table.",heroSub:"Choose your moment. Each menu tells a different tide.",scrollHint:"↓ Choose a menu ↓",back:"All menus",cottura:"Cooking",tempo:"Preparation",origine:"Origin",allergeni:"Allergens & Notes",ingredienti:"Ingredients",footer:"Harbour Pier · Open every day<br>Fresh daily produce · Locally caught fish",explore:"Explore",dishesN:"dishes",labelsN:"labels",articlesN:"Items",flavorsN:"flavors",wineMapLabel:"Filter by region",wineFizzLabel:"Type",wineAll:"All regions",fizzSecco:"Still",fizzFrizzante:"Sparkling",fizzBollicine:"Sparkling wines",fizzChampagne:"Champagne",fizzAll:"All",wColBianco:"White Wines",wColRosso:"Red Wines",wColRose:"Rosé Wines",wineEmpty:"No wines for this selection",wineRegionPick:"All of Italy",allergenLegendBtn:"Allergen legend",allergenLegendTitle:"Allergen legend"},
+  fr:{tagline:"Cuisine de la mer · Port",welcome:"Bienvenue chez",benvenutiDa:"Bienvenue chez :",heroTitle:"La mer,",heroEm:"à table.",heroSub:"Choisissez votre moment. Chaque menu raconte une marée différente.",scrollHint:"↓ Choisissez un menu ↓",back:"Tous les menus",cottura:"Cuisson",tempo:"Préparation",origine:"Provenance",allergeni:"Allergènes & Notes",ingredienti:"Ingrédients",footer:"Quai du Port · Ouvert tous les jours<br>Produits frais du jour · Pêche locale",explore:"Explorer",dishesN:"plats",labelsN:"\u00e9tiquettes",articlesN:"Articles",flavorsN:"parfums",wineMapLabel:"Filtrer par région",wineFizzLabel:"Type",wineAll:"Toutes les régions",fizzSecco:"Tranquille",fizzFrizzante:"Pétillant",fizzBollicine:"Bulles",fizzChampagne:"Champagne",fizzAll:"Tous",wColBianco:"Vins Blancs",wColRosso:"Vins Rouges",wColRose:"Vins Rosés",wineEmpty:"Aucun vin pour cette sélection",wineRegionPick:"Toute l'Italie",allergenLegendBtn:"Légende allergènes",allergenLegendTitle:"Légende allergènes"},
+  de:{tagline:"Meeresküche · Hafen",welcome:"Willkommen bei",benvenutiDa:"Willkommen bei:",heroTitle:"Das Meer,",heroEm:"auf dem Tisch.",heroSub:"Wähle deinen Moment. Jede Speisekarte erzählt eine andere Gezeitenstimmung.",scrollHint:"↓ Menü wählen ↓",back:"Alle Menüs",cottura:"Zubereitung",tempo:"Vorbereitung",origine:"Herkunft",allergeni:"Allergene & Hinweise",ingredienti:"Zutaten",footer:"Hafenkai · Täglich geöffnet<br>Frische Tagesprodukte · Lokaler Fang",explore:"Entdecken",dishesN:"Gerichte",labelsN:"Etiketten",articlesN:"Artikel",flavorsN:"Sorten",wineMapLabel:"Nach Region filtern",wineFizzLabel:"Typ",wineAll:"Alle Regionen",fizzSecco:"Still",fizzFrizzante:"Prickelnd",fizzBollicine:"Schaumweine",fizzChampagne:"Champagner",fizzAll:"Alle",wColBianco:"Weißweine",wColRosso:"Rotweine",wColRose:"Roséweine",wineEmpty:"Kein Wein für diese Auswahl",wineRegionPick:"Ganz Italien",allergenLegendBtn:"Allergenlegende",allergenLegendTitle:"Allergenlegende"}
 };
 /* bandiere SVG */
 const FLAGS={
@@ -780,8 +805,8 @@ const DEFAULT_MENUS={
         {id:"estathe-pesca-limone",name:{it:"Estathè Pesca e Limone",en:"Estathè Peach and Lemon",fr:"Estathè pêche et citron",de:"Estathè Pfirsich und Zitrone"},price:"3,00",type:["veg","gf"],img:"",desc:{it:"Tè freddo al gusto pesca o limone.",en:"Iced tea in peach or lemon flavour.",fr:"Thé glacé goût pêche ou citron.",de:"Eistee mit Pfirsich- oder Zitronengeschmack."},cook:{it:"Bar",en:"Bar",fr:"Bar",de:"Bar"},time:{it:"al momento",en:"made to order",fr:"à la minute",de:"frisch zubereitet"},orig:{it:"Caffetteria",en:"Coffee bar",fr:"Café",de:"Kaffeebar"},allerg:{it:"Nessuno.",en:"None.",fr:"Aucun.",de:"Keine."}},
         {id:"acqua-1l",name:{it:"Acqua 1L",en:"Water 1L",fr:"Eau 1 L",de:"Wasser 1 l"},price:"2,00",type:["veg","gf"],img:"",desc:{it:"Bottiglia d'acqua da 1 litro.",en:"1 litre bottle of water.",fr:"Bouteille d'eau de 1 litre.",de:"1-Liter-Flasche Wasser."},cook:{it:"Bar",en:"Bar",fr:"Bar",de:"Bar"},time:{it:"al momento",en:"made to order",fr:"à la minute",de:"frisch zubereitet"},orig:{it:"Caffetteria",en:"Coffee bar",fr:"Café",de:"Kaffeebar"},allerg:{it:"Nessuno.",en:"None.",fr:"Aucun.",de:"Keine."}},
         {id:"acqua-05",name:{it:"Acqua 0,5",en:"Water 0.5L",fr:"Eau 0,5 L",de:"Wasser 0,5 l"},price:"1,00",type:["veg","gf"],img:"",desc:{it:"Bottiglia d'acqua da mezzo litro.",en:"Half-litre bottle of water.",fr:"Bouteille d'eau d'un demi-litre.",de:"Halbliterflasche Wasser."},cook:{it:"Bar",en:"Bar",fr:"Bar",de:"Bar"},time:{it:"al momento",en:"made to order",fr:"à la minute",de:"frisch zubereitet"},orig:{it:"Caffetteria",en:"Coffee bar",fr:"Café",de:"Kaffeebar"},allerg:{it:"Nessuno.",en:"None.",fr:"Aucun.",de:"Keine."}},
-        {id:"te-tisane",name:{it:"Tè e Tisane",en:"Tea and Herbal Infusions",fr:"Thés et tisanes",de:"Tee und Kräutertees"},price:"3,00",type:["veg","gf"],img:"",desc:{it:"Limone e zenzero, finocchio, tè classico, tè verde, tè nero alla pesca, tè mango e vaniglia, frutti di bosco, cannella e ciliegia, camomilla, tisana rilassante e digestiva.",en:"Lemon and ginger, fennel, classic tea, green tea, peach black tea, mango and vanilla tea, mixed berries, cinnamon and cherry, chamomile, relaxing and digestive infusions.",fr:"Citron et gingembre, fenouil, thé classique, thé vert, thé noir à la pêche, thé mangue et vanille, fruits des bois, cannelle et cerise, camomille, infusions relaxante et digestive.",de:"Zitrone und Ingwer, Fenchel, klassischer Tee, grüner Tee, schwarzer Pfirsichtee, Mango-Vanille-Tee, Waldfrüchte, Zimt und Kirsche, Kamille, entspannender und verdauungsfördernder Kräutertee."},cook:{it:"Bar",en:"Bar",fr:"Bar",de:"Bar"},time:{it:"al momento",en:"made to order",fr:"à la minute",de:"frisch zubereitet"},orig:{it:"Caffetteria",en:"Coffee bar",fr:"Café",de:"Kaffeebar"},allerg:{it:"Nessuno.",en:"None.",fr:"Aucun.",de:"Keine."}},
-        {id:"cioccolata-calda",name:{it:"Cioccolata Calda",en:"Hot Chocolate",fr:"Chocolat chaud",de:"Heiße Schokolade"},price:"4,00",type:["veg","gf"],img:"",desc:{it:"Classica, cookies, gianduja, cioccolato bianco, fondente, nocciola o caramello salato.",en:"Classic, cookies, gianduja, white chocolate, dark chocolate, hazelnut or salted caramel.",fr:"Classique, cookies, gianduja, chocolat blanc, chocolat noir, noisette ou caramel salé.",de:"Klassisch, Cookies, Gianduja, weiße Schokolade, Zartbitter, Haselnuss oder Salzkaramell."},cook:{it:"Bar",en:"Bar",fr:"Bar",de:"Bar"},time:{it:"al momento",en:"made to order",fr:"à la minute",de:"frisch zubereitet"},orig:{it:"Caffetteria",en:"Coffee bar",fr:"Café",de:"Kaffeebar"},allerg:{it:"Latte; può contenere frutta a guscio.",en:"Milk; may contain nuts.",fr:"Lait ; peut contenir des fruits à coque.",de:"Milch; kann Schalenfrüchte enthalten."}}
+        {id:"te-tisane",name:{it:"Tè e Tisane",en:"Tea and Herbal Infusions",fr:"Thés et tisanes",de:"Tee und Kräutertees"},price:"3,00",type:["veg","gf"],img:"",desc:{it:"Limone e zenzero, finocchio, tè classico, tè verde, tè nero alla pesca, tè mango e vaniglia, frutti di bosco, cannella e ciliegia, camomilla, tisana rilassante e digestiva.",en:"Lemon and ginger, fennel, classic tea, green tea, peach black tea, mango and vanilla tea, mixed berries, cinnamon and cherry, chamomile, relaxing and digestive infusions.",fr:"Citron et gingembre, fenouil, thé classique, thé vert, thé noir à la pêche, thé mangue et vanille, fruits des bois, cannelle et cerise, camomille, infusions relaxante et digestive.",de:"Zitrone und Ingwer, Fenchel, klassischer Tee, grüner Tee, schwarzer Pfirsichtee, Mango-Vanille-Tee, Waldfrüchte, Zimt und Kirsche, Kamille, entspannender und verdauungsfördernder Kräutertee."},options:{it:["limone e zenzero","finocchio","t\u00e8 classico","t\u00e8 verde","t\u00e8 nero alla pesca","t\u00e8 mango e vaniglia","frutti di bosco","cannella e ciliegia","camomilla","tisana rilassante","tisana digestiva"],en:["lemon and ginger","fennel","classic tea","green tea","peach black tea","mango and vanilla tea","mixed berries","cinnamon and cherry","chamomile","relaxing herbal infusion","digestive herbal infusion"],fr:["citron et gingembre","fenouil","th\u00e9 classique","th\u00e9 vert","th\u00e9 noir \u00e0 la p\u00eache","th\u00e9 mangue et vanille","fruits des bois","cannelle et cerise","camomille","tisane relaxante","tisane digestive"],de:["Zitrone und Ingwer","Fenchel","klassischer Tee","gr\u00fcner Tee","schwarzer Pfirsichtee","Mango-Vanille-Tee","Waldfr\u00fcchte","Zimt und Kirsche","Kamille","entspannender Kr\u00e4utertee","verdauungsf\u00f6rdernder Kr\u00e4utertee"]},cook:{it:"Bar",en:"Bar",fr:"Bar",de:"Bar"},time:{it:"al momento",en:"made to order",fr:"à la minute",de:"frisch zubereitet"},orig:{it:"Caffetteria",en:"Coffee bar",fr:"Café",de:"Kaffeebar"},allerg:{it:"Nessuno.",en:"None.",fr:"Aucun.",de:"Keine."}},
+        {id:"cioccolata-calda",name:{it:"Cioccolata Calda",en:"Hot Chocolate",fr:"Chocolat chaud",de:"Heiße Schokolade"},price:"4,00",type:["veg","gf"],img:"",desc:{it:"Classica, cookies, gianduja, cioccolato bianco, fondente, nocciola o caramello salato.",en:"Classic, cookies, gianduja, white chocolate, dark chocolate, hazelnut or salted caramel.",fr:"Classique, cookies, gianduja, chocolat blanc, chocolat noir, noisette ou caramel salé.",de:"Klassisch, Cookies, Gianduja, weiße Schokolade, Zartbitter, Haselnuss oder Salzkaramell."},options:{it:["classica","cookies","gianduja","cioccolato bianco","fondente","nocciola","caramello salato"],en:["classic","cookies","gianduja","white chocolate","dark chocolate","hazelnut","salted caramel"],fr:["classique","cookies","gianduja","chocolat blanc","chocolat noir","noisette","caramel sal\u00e9"],de:["klassisch","Cookies","Gianduja","wei\u00dfe Schokolade","Zartbitter","Haselnuss","Salzkaramell"]},cook:{it:"Bar",en:"Bar",fr:"Bar",de:"Bar"},time:{it:"al momento",en:"made to order",fr:"à la minute",de:"frisch zubereitet"},orig:{it:"Caffetteria",en:"Coffee bar",fr:"Café",de:"Kaffeebar"},allerg:{it:"Latte; può contenere frutta a guscio.",en:"Milk; may contain nuts.",fr:"Lait ; peut contenir des fruits à coque.",de:"Milch; kann Schalenfrüchte enthalten."}}
       ]},
       {
             "id": "must-col",
@@ -6135,7 +6160,13 @@ function closeAllergenLegend(){
   }
 }
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeAllergenLegend(); });
-function priceLabel(d){ return d && d.price ? "€ "+d.price : ""; }
+function priceLabel(d){ return d && d.price ? "\u20ac "+d.price : ""; }
+function sectionCountWord(s){
+  if(s.wine||s.kind==='spirits') return I18N[LANG].labelsN||I18N.it.labelsN;
+  if(s.kind==='soft') return I18N[LANG].articlesN||I18N.it.articlesN;
+  if(s.id==='gelati-pub') return I18N[LANG].flavorsN||I18N.it.flavorsN;
+  return I18N[LANG].dishesN;
+}
 
 /* helper immagini:
    - data-URI o URL http → usata così com'è (foto caricata dalla dashboard)
@@ -6160,6 +6191,17 @@ let drinkBase="all";   // filtro base alcolica per la sezione drink
 let spiritBase="all";  // filtro famiglia per distillati
 
 /* ============ RENDER LINGUE ============ */
+function placeLangSelector(){
+  const langs=document.getElementById('langs');
+  const landingSlot=document.getElementById('landingLangSlot');
+  const topbar=document.getElementById('topbar');
+  if(!langs||!landingSlot||!topbar) return;
+  if(document.body.classList.contains('home-landing')){
+    if(langs.parentElement!==landingSlot) landingSlot.appendChild(langs);
+  }else if(langs.parentElement!==topbar){
+    topbar.appendChild(langs);
+  }
+}
 function buildFlags(){
   const c=document.getElementById('langs');
   c.innerHTML="";
@@ -6177,6 +6219,7 @@ function setLang(l){
   applyUI();
   if(curMenu) renderMenu(curMenu,true);
   else buildCarousel();
+  placeLangSelector();
 }
 function applyUI(){
   document.querySelectorAll('[data-t]').forEach(el=>{
@@ -6288,6 +6331,8 @@ function introSceneMarkup(key){
     </div>`;
 }
 function openMenu(key){
+  document.body.classList.remove('home-landing');
+  placeLangSelector();
   curMenu=key;curFilter="all";wineRegion="all";wineFizz="all";drinkBase="all";spiritBase="all";selGin=null;selTonic=null;
   const intro=document.getElementById('menuIntro');
   const theme=document.getElementById('introTheme');
@@ -6311,6 +6356,9 @@ function openMenu(key){
 }
 function goHome(){
   curMenu=null;
+  document.body.classList.add('home-landing');
+  placeLangSelector();
+  clearWineTheme();
   closeProduct();
   closeAllergenLegend();
   const allergenBtn=document.getElementById('allergenInfoBtn');
@@ -6319,6 +6367,34 @@ function goHome(){
   document.getElementById('screen-home').classList.add('active');
   window.scrollTo(0,0);
   buildCarousel();
+}
+
+function toggleMinimalOptions(id){
+  const row=document.querySelector(`.minimal-row[data-options="${id}"]`);
+  const box=document.getElementById('opts-'+id);
+  if(!box) return;
+  const open=box.classList.toggle('open');
+  if(row) row.classList.toggle('open',open);
+}
+function menuScrollOffset(){
+  const topbar=document.getElementById('topbar');
+  const nav=document.getElementById('secnav');
+  const topbarH=topbar?topbar.getBoundingClientRect().height:62;
+  const navH=nav&&nav.offsetParent!==null?nav.getBoundingClientRect().height:0;
+  return Math.ceil(topbarH+navH+12);
+}
+function setCurrentSectionLink(id){
+  document.querySelectorAll('.secnav a').forEach(a=>{
+    a.classList.toggle('cur',!!id&&a.getAttribute('href')==='#'+id);
+  });
+}
+function scrollToMenuSection(id){
+  const section=document.getElementById(id);
+  if(!section) return;
+  const title=section.querySelector('h3')||section;
+  const y=window.scrollY+title.getBoundingClientRect().top-menuScrollOffset()-10;
+  window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
+  setCurrentSectionLink(id);
 }
 
 function renderMenu(key,keepScroll){
@@ -6349,7 +6425,7 @@ function renderMenu(key,keepScroll){
   visibleSecs.forEach(s=>{
     const a=document.createElement('a');
     a.href="#sec-"+s.id;a.textContent=tr(s.name);
-    a.onclick=(e)=>{e.preventDefault();document.getElementById('sec-'+s.id).scrollIntoView({behavior:'smooth',block:'start'});};
+    a.onclick=(e)=>{e.preventDefault();scrollToMenuSection('sec-'+s.id);};
     nav.appendChild(a);
   });
 
@@ -6357,14 +6433,16 @@ function renderMenu(key,keepScroll){
   const body=document.getElementById('menu-body');
   body.innerHTML="";
   m.sections.forEach(s=>{
-    if(isExcludedFromBestFilter(s)) return;
+    if(isExcludedFromActiveFilter(s)) return;
     const isDrink=s.kind==='drink', isSoft=s.kind==='soft', isGin=s.kind==='gin', isMinimal=s.kind==='minimal', isDrinkList=s.kind==='drinkList', isBreakfastList=s.kind==='breakfastList', isSpirits=s.kind==='spirits';
     let dishes;
     if(isDrink){
       dishes=s.dishes.filter(d=> drinkBase==='all' || d.base===drinkBase);
     }else if(isSpirits){
       dishes=s.dishes.filter(d=> spiritBase==='all' || spiritCategory(d)===spiritBase);
-    }else if(isSoft||isGin||isMinimal||isDrinkList||isBreakfastList){
+    }else if(isMinimal||isBreakfastList){
+      dishes=curFilter==='all' ? s.dishes.slice() : s.dishes.filter(d=>passFilter(d));
+    }else if(isSoft||isGin||isDrinkList){
       dishes=s.dishes.slice();
     }else{
       dishes=s.dishes.filter(d=>passFilter(d));
@@ -6372,7 +6450,7 @@ function renderMenu(key,keepScroll){
     if(dishes.length===0 && !isDrink && !isGin) return;
     const sec=document.createElement('div');
     sec.className="section";sec.id="sec-"+s.id;
-    let inner=`<h3>${tr(s.name)}</h3><span class="scount">${isGin?'':dishes.length+' '+I18N[LANG].dishesN}</span>`;
+    let inner=`<h3>${tr(s.name)}</h3><span class="scount">${isGin?'':dishes.length+' '+sectionCountWord(s)}</span>`;
     if(s.wine){
       inner+=renderWineSection(key,s);
     }else if(isGin){
@@ -6399,7 +6477,14 @@ function renderMenu(key,keepScroll){
       inner+='<div class="minimal-list">';
       dishes.forEach(d=>{
         const best=(d.type||[]).includes('best')?' best-seller':'';
-        inner+=`<div class="minimal-row${best}"><span>${tr(d.name)}</span><span class="mprice">${priceLabel(d)}</span></div>`;
+        const hasOptions=!!d.options;
+        const optsAttr=hasOptions?` data-options="${d.id}" onclick="toggleMinimalOptions('${d.id}')"`:'';
+        const caret=hasOptions?'<span class="option-caret">&#8964;</span>':'';
+        inner+=`<div class="minimal-row${best}${hasOptions?' has-options':''}"${optsAttr}><span>${tr(d.name)}</span><span class="mprice">${priceLabel(d)}${caret}</span></div>`;
+        if(hasOptions){
+          const list=(d.options[LANG]||d.options.it||[]).join(', ');
+          inner+=`<div class="minimal-options" id="opts-${d.id}">${list}</div>`;
+        }
       });
       inner+='</div>';
     }else if(isDrinkList){
@@ -6461,6 +6546,7 @@ function renderMenu(key,keepScroll){
     body.innerHTML=`<div class="section"><div class="empty">— ${LANG==='it'?'Nessuna portata per questo filtro':LANG==='en'?'No dishes for this filter':LANG==='fr'?'Aucun plat pour ce filtre':'Keine Gerichte für diesen Filter'} —</div></div>`;
   }
   syncWineUI();
+  syncWineThemeObserver();
   syncDrinkUI();
   syncSpiritUI();
   syncGinUI();
@@ -6519,7 +6605,10 @@ function syncSpiritUI(){
   });
 }
 const BEST_FILTER_EXCLUDED_SECTIONS=new Set(['gelati-pub','bibite-pub','distillati-pub']);
-function isExcludedFromBestFilter(s){
+const FOOD_FILTER_EXCLUDED_SECTIONS=new Set(['bibite-pub','distillati-pub','vini-pub']);
+function isExcludedFromActiveFilter(s){
+  if(curFilter==='all') return false;
+  if(FOOD_FILTER_EXCLUDED_SECTIONS.has(s.id)) return true;
   return curFilter==='best' && BEST_FILTER_EXCLUDED_SECTIONS.has(s.id);
 }
 function passFilter(d){
@@ -6527,8 +6616,9 @@ function passFilter(d){
   return (d.type||[]).includes(curFilter);
 }
 function sectionHasVisible(s){
-  if(isExcludedFromBestFilter(s)) return false;
-  if(s.kind==='drink'||s.kind==='soft'||s.kind==='gin'||s.kind==='minimal'||s.kind==='drinkList'||s.kind==='breakfastList'||s.kind==='spirits') return true;
+  if(isExcludedFromActiveFilter(s)) return false;
+  if(s.kind==='minimal'||s.kind==='breakfastList') return curFilter==='all' ? true : s.dishes.some(d=>passFilter(d));
+  if(s.kind==='drink'||s.kind==='soft'||s.kind==='gin'||s.kind==='drinkList'||s.kind==='spirits') return true;
   return s.dishes.some(d=>passFilter(d));
 }
 
@@ -6694,6 +6784,44 @@ function renderWineSection(key,s){
   return html;
 }
 
+/* colore delle onde mentre si scorrono i vini */
+let wineThemeCleanup=null;
+const WINE_WAVE_CLASSES=['wine-wave-bianco','wine-wave-rosso','wine-wave-rose'];
+function clearWineTheme(){
+  document.body.classList.remove(...WINE_WAVE_CLASSES);
+  const screen=document.getElementById('screen-menu');
+  if(screen) screen.classList.remove('wine-theme-bianco','wine-theme-rosso','wine-theme-rose');
+  if(wineThemeCleanup){
+    wineThemeCleanup();
+    wineThemeCleanup=null;
+  }
+}
+function applyWineTheme(groups){
+  const viewTop=window.innerHeight*.12;
+  const viewBottom=window.innerHeight*.88;
+  const center=window.innerHeight*.44;
+  const visible=groups.map(g=>({el:g,rect:g.getBoundingClientRect()})).filter(x=>x.rect.bottom>viewTop && x.rect.top<viewBottom);
+  document.body.classList.remove(...WINE_WAVE_CLASSES);
+  if(!visible.length) return;
+  visible.sort((a,b)=>Math.abs(((a.rect.top+a.rect.bottom)/2)-center)-Math.abs(((b.rect.top+b.rect.bottom)/2)-center));
+  const color=['bianco','rosso','rose'].find(c=>visible[0].el.classList.contains(c));
+  if(color) document.body.classList.add('wine-wave-'+color);
+}
+function syncWineThemeObserver(){
+  clearWineTheme();
+  if(curMenu!=='cena') return;
+  const groups=[...document.querySelectorAll('.wine-color-group')];
+  if(!groups.length) return;
+  const onScroll=()=>applyWineTheme(groups);
+  window.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('resize',onScroll);
+  wineThemeCleanup=()=>{
+    window.removeEventListener('scroll',onScroll);
+    window.removeEventListener('resize',onScroll);
+  };
+  requestAnimationFrame(onScroll);
+}
+
 /* applica stati visivi mappa/switch DOPO il render */
 function syncWineUI(){
   const map=document.getElementById('italyMap');
@@ -6798,22 +6926,26 @@ window.addEventListener('scroll',()=>{
   /* evidenzia sezione corrente nella nav */
   if(curMenu){
     const secs=document.querySelectorAll('.section');
+    const marker=menuScrollOffset()+18;
     let cur=null;
-    secs.forEach(s=>{const r=s.getBoundingClientRect();if(r.top<160) cur=s.id;});
-    document.querySelectorAll('.secnav a').forEach(a=>{
-      a.classList.toggle('cur',cur&&a.getAttribute('href')==='#'+cur);
+    secs.forEach(s=>{
+      const t=s.querySelector('h3')||s;
+      if(t.getBoundingClientRect().top<=marker) cur=s.id;
     });
+    setCurrentSectionLink(cur);
   }
 },{passive:true});
 
 document.addEventListener('keydown',e=>{if(e.key==="Escape"){if(document.getElementById('product').classList.contains('active'))closeProduct();else if(curMenu)goHome();}});
 
 /* ============ INIT ============ */
+document.body.classList.add('home-landing');
 document.getElementById('heroLogoImg').src=LOGO_SRC;
 document.getElementById('brandLogoImg').src=FISH_SRC;
 document.getElementById('poweredLogoImg').src=IRIDE_LOGO_SRC;
+document.getElementById('landingPoweredLogoImg').src=IRIDE_LOGO_SRC;
 document.getElementById('introLogoImg').src=LOGO_SRC;
-buildFlags();applyUI();buildCarousel();
+buildFlags();placeLangSelector();applyUI();buildCarousel();
 
 /* carico i dati più recenti dal server. Se non disponibili (sito aperto in
    locale o server offline) resta il menu di default già mostrato. */
